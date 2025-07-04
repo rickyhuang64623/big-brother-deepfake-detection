@@ -1,0 +1,48 @@
+# Training configuration
+training:
+  num_epochs: 100
+  batch_size: 4
+  save_interval: 5
+  learning_rate:
+    stego: 0.0001
+    template: 0.0001
+    detector: 0.0001
+
+# Model configuration
+model:
+  stego:
+    in_channels: 3
+    num_blocks: 4
+  template:
+    latent_dim: 128
+    output_size: 128
+  detector:
+    in_channels: 3
+
+# Loss configuration
+loss:
+  stego:
+    lambda_cover: 1.0
+    lambda_secret: 1.0
+    lambda_remains: 1.0
+    lambda_sec: 0.3
+  template:
+    lambda_reg: 0.05
+  detector:
+    lambda_fm: 10.0
+
+# Data configuration
+data:
+  train_path: "data/train"
+  val_path: "data/val"
+  image_size: 128
+  num_workers: 0
+
+# Paths
+paths:
+  checkpoint_dir: "checkpoints"
+  log_dir: "logs"
+  output_dir: "outputs"
+
+# Device
+device: "cpu" 

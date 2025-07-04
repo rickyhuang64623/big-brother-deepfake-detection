@@ -1,0 +1,28 @@
+# Ignore datasets, outputs, checkpoints, logs, and system files
+# Data and outputs
+/data/
+/outputs/
+/checkpoints/
+/logs/
+/wandb/
+
+# Model weights and large files
+*.pt
+*.pth
+*.ckpt
+
+# Images and results
+*.png
+*.jpg
+*.jpeg
+*.log
+*.tmp
+
+# System and Python cache
+.DS_Store
+__pycache__/
+*.pyc
+
+# VSCode and editor settings
+.vscode/
+.idea/ 
