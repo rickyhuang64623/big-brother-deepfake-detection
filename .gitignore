@@ -1,6 +1,8 @@
 # Ignore datasets, outputs, checkpoints, logs, and system files
 # Data and outputs
-/data/
+/data/train/
+/data/test/
+/data/val/
 /outputs/
 /checkpoints/
 /logs/
