@@ -1,8 +1,8 @@
 import os, shutil, random
 
 src_dir = "img_align_celeba"  # your image folder
-train_dir = "train"
-test_dir = "test"
+train_dir = "data/train"
+test_dir = "data/test"
 os.makedirs(train_dir, exist_ok=True)
 os.makedirs(test_dir, exist_ok=True)
 
