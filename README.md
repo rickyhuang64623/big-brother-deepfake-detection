@@ -41,7 +41,7 @@ This project introduces a proactive deepfake detection framework that embeds a l
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/big-brother-deepfake-detection.git
+   git clone https://github.com/rickyhuang64623/big-brother-deepfake-detection.git
    cd big-brother-deepfake-detection
    ```
 
@@ -51,11 +51,12 @@ This project introduces a proactive deepfake detection framework that embeds a l
    ```
 
 3. **Prepare the dataset:**
-   - Place your training/validation images in `data/train/real/`, `data/train/fake/`, `data/val/real/`, and `data/val/fake/`.
-   - Optionally, run:
+   - Place your source images in `img_align_celeba/`.
+   - Run:
      ```bash
-     python scripts/prepare_dataset.py
+     python test.py
      ```
+   - This will split your images into `data/train/` and `data/test/` folders.
 
 4. **Compute the average face (for template initialization):**
    ```bash

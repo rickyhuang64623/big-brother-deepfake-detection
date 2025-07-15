@@ -1,4 +1,7 @@
+
+import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import torch
 import argparse
 from PIL import Image
@@ -6,9 +9,10 @@ import torchvision.transforms as transforms
 from torchvision.utils import save_image
 import yaml
 
-from models.steganography import InvertibleSteganography
+from models.steganography import SteganoNetwork
 from models.template import LearnableTemplate
-from models.detector import DeepfakeDetector
+from models.detector import Detector
+
 
 def load_config(config_path):
     with open(config_path, 'r') as f:
@@ -17,14 +21,14 @@ def load_config(config_path):
 
 def load_models(config, checkpoint_path):
     # Initialize models
-    stego_net = InvertibleSteganography(
+    stego_net = SteganoNetwork(
         in_channels=config['model']['stego']['in_channels'],
         num_blocks=config['model']['stego']['num_blocks']
     )
     template = LearnableTemplate(
         size=config['model']['template']['output_size']
     )
-    detector = DeepfakeDetector(
+    detector = Detector(
         in_channels=config['model']['detector']['in_channels']
     )
     
@@ -58,7 +62,7 @@ def protect_image(image_path, output_path, stego_net, template, transform, devic
         learnable_template = template(1)
         
         # Embed template into image
-        protected_image = stego_net(image, learnable_template)
+        protected_image, _ = stego_net(image, learnable_template)
         
         # Save protected image
         save_image(protected_image, output_path, normalize=True)
@@ -75,13 +79,18 @@ def detect_manipulation(image_path, stego_net, template, detector, transform, de
         learnable_template = template(1)
         
         # Extract template from image
-        extracted_template = stego_net(image, learnable_template, reverse=True)
+        _, extracted_template = stego_net.reverse(image, learnable_template)
+
+        # Debug: print stats for extracted_template
+        print(f"[DEBUG] Extracted template stats - min: {extracted_template.min().item():.4f}, max: {extracted_template.max().item():.4f}, mean: {extracted_template.mean().item():.4f}, has_nan: {torch.isnan(extracted_template).any().item()}")
         
         # Prepare detection input
-        detection_input = torch.cat([learnable_template, extracted_template], dim=1)
+        detection_input = extracted_template
         
         # Get detection result
         pred, _ = detector(detection_input)
+        # Debug: print stats for detector output
+        print(f"[DEBUG] Detector output - pred: {pred}, has_nan: {torch.isnan(pred).any().item()}")
         
         # Save results
         os.makedirs(output_dir, exist_ok=True)
